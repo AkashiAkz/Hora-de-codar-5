@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caixa Eletrônico Simples</title>
+</head>
+<body>
+
+    <script>
+        const senhaCorreta = "3589";
+        let saldo = 1000;
+        let extrato = ["Depósito inicial: R$ 1000", "Compra: R$ 50 - Supermercado", "Depósito: R$ 200 - Transferência recebida"];
+        let nome = prompt("Qual é o seu nome?");
+        alert(`Olá ${nome}, é um prazer ter você por aqui!`);
+
+        function validarSenha() {
+            const senha = prompt("Digite sua senha:");
+            return senha === senhaCorreta;
+        }
+
+        function inicio() {
+            let opcao;
+            do {
+                opcao = parseInt(prompt("Escolha uma opção:\n1 - Saldo\n2 - Extrato\n3 - Saque\n4 - Depósito\n5 - Transferência\n6 - Sair"));
+
+                switch (opcao) {
+                    case 1:
+                        if (validarSenha()) {
+                            consultarSaldo();
+                        } else {
+                            alert("Senha incorreta. Tente novamente.");
+                        }
+                        break;
+                    case 2:
+                        if (validarSenha()) {
+                            consultarExtrato();
+                        } else {
+                            alert("Senha incorreta. Tente novamente.");
+                        }
+                        break;
+                    case 3:
+                        realizarSaque();
+                        break;
+                    case 4:
+                        realizarDeposito();
+                        break;
+                    case 5:
+                        if (validarSenha()) {
+                            realizarTransferencia();
+                        } else {
+                            alert("Senha incorreta. Tente novamente.");
+                        }
+                        break;
+                    case 6:
+                        alert(`${nome}, foi um prazer ter você por aqui!`);
+                        break;
+                    default:
+                        alert("Opção inválida. Tente novamente.");
+                }
+            } while (opcao !== 6);
+        }
+
+        function consultarSaldo() {
+            alert(`Seu saldo atual é: R$ ${saldo}`);
+        }
+
+        function consultarExtrato() {
+            alert(`Extrato:\n${extrato.join("\n")}`);
+        }
+
+        function realizarSaque() {
+            if (!validarSenha()) {
+                alert("Senha incorreta. Tente novamente.");
+                return;
+            }
+            
+            let saque = parseFloat(prompt("Digite o valor para sacar:"));
+            if (saque <= 0) {
+                alert("Operação não autorizada. Valor inválido.");
+            } else if (saque > saldo) {
+                alert("Operação não autorizada. Saldo insuficiente.");
+            } else {
+                saldo -= saque;
+                extrato.push(`Saque: R$ ${saque}`);
+                alert(`Saque de R$ ${saque} realizado com sucesso. Saldo atual: R$ ${saldo}`);
+            }
+        }
+
+        function realizarDeposito() {
+            if (!validarSenha()) {
+                alert("Senha incorreta. Tente novamente.");
+                return;
+            }
+
+            let deposito = parseFloat(prompt("Digite o valor para depositar:"));
+            if (deposito <= 0) {
+                alert("Operação não autorizada. Valor inválido.");
+            } else {
+                saldo += deposito;
+                extrato.push(`Depósito: R$ ${deposito}`);
+                alert(`Depósito de R$ ${deposito} realizado com sucesso. Saldo atual: R$ ${saldo}`);
+            }
+        }
+
+        function realizarTransferencia() {
+            let conta = prompt("Digite o número da conta para transferência:");
+            if (!/^\d+$/.test(conta)) {
+                alert("Operação não autorizada. Número de conta inválido.");
+                return;
+            }
+
+            if (!validarSenha()) {
+                alert("Senha incorreta. Tente novamente.");
+                return;
+            }
+
+            let transferencia = parseFloat(prompt("Digite o valor para transferir:"));
+            if (transferencia <= 0) {
+                alert("Operação não autorizada. Valor inválido.");
+            } else if (transferencia > saldo) {
+                alert("Operação não autorizada. Saldo insuficiente.");
+            } else {
+                saldo -= transferencia;
+                extrato.push(`Transferência: R$ ${transferencia} para conta ${conta}`);
+                alert(`Transferência de R$ ${transferencia} para conta ${conta} realizada com sucesso. Saldo atual: R$ ${saldo}`);
+            }
+        }
+
+        // Inicia o sistema ao carregar a página
+        inicio();
+    </script>
+
+</body>
+</html>
